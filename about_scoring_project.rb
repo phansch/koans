@@ -30,7 +30,48 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  return 0 if dice == []
+  total = 0
+  1.upto(9) do |i|
+    temp = dice.select { |n| n == i }
+    next if temp.empty?
+
+    case
+    when i == 1
+      if temp.size > 2
+        total += 1000
+        remove_item(dice, i, 3)
+        remove_item(temp, i, 3)
+      end
+      next if dice.empty?
+      total += 100 * temp.size
+      remove_item(dice, i)
+      remove_item(temp, i)
+    when i == 5
+      if temp.size > 2
+        total += i * 100
+        remove_item(dice, i, 3)
+        remove_item(temp, i, 3)
+      end
+      next if dice.empty?
+      total += 50 * temp.size
+      remove_item(dice, i)
+      remove_item(temp, i)
+    else
+      if temp.size > 2
+        total += i * 100
+        remove_item(dice, i)
+        remove_item(temp, i)
+      end
+    end
+
+  end
+  total
+end
+
+def remove_item(dice, item, repeat = 1)
+  repeat.times { dice.delete_at(dice.index(item)) }
+  dice
 end
 
 class AboutScoringProject < Neo::Koan
